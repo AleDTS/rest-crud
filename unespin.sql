@@ -7,17 +7,18 @@ drop table if exists Local;
 drop trigger if exists t1;
 
 create table Organizacao(
-  nome  varchar(30) not null,
-  id  integer not null,
+  nome_org  varchar(30) not null,
+  id_org  integer not null,
   categoria varchar(30) default 'Outro',
-  primary key(id)
+  primary key(id_org)
 );
 
 create table Local(
-  nome  varchar(30) not null,
+  nome_local  varchar(30) not null,
+  id_local  integer not null,
   capacidade  integer,
   endereco  varchar(100),
-  primary key(nome),
+  primary key(id_local),
   check(capacidade>0)
 );
 
@@ -30,11 +31,11 @@ create table Evento (
   responsavel varchar(50) not null,
   org_responsavel integer  not null,
   categoria varchar(30) default 'Outro',
-  local_evento  varchar(50) not null,
+  local_evento  integer not null,
   descricao varchar(1000),
   primary key(id),
-  foreign key(local_evento) references Local(nome),
-  foreign key(org_responsavel)  references Organizacao(id)
+  foreign key(local_evento) references Local(id_local),
+  foreign key(org_responsavel)  references Organizacao(id_org)
 );
 
 insert into Organizacao values
@@ -43,8 +44,8 @@ insert into Organizacao values
 ;
 
 insert into Local values
-  ("Guilhermao",5000, ''),
-  ("Sala 1",200, '')
+  ("Guilhermao",1,5000, ''),
+  ("Sala 1",2,200, '')
 ;
 
 insert into Evento values
@@ -88,13 +89,17 @@ end;
 
 # select data, nome, local_evento, categoria
 # from Evento
-# where nome like '%jor%'
-#
+# where nome like '%assembleia%'
+
 # select data, nome, local_evento, categoria
 # from Evento
 # where local_evento like '%guilherm%'
 #
+
 # select E.data, E.nome, E.local_evento, E.categoria
 # from Evento as E, Organizacao as O
 # where O.id = E.org_responsavel and
-#       O. nome like '%CAA%'
+#       O. nome like '%Jr%'
+
+# insert into Organizacao values("CEUB",3,"");
+# insert into Local values("Bosque", 3,1000, "");

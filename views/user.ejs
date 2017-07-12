@@ -255,13 +255,14 @@ td.text-right {
 <div class="page-data">
 
 <div id="buttons" >
-  <a href="/api/add" class="btn blue">Criar</a>
     <form method="post" action="" id="the-form">
+        <!-- <input href="/api/add" type="button" value="Criar" class="btn blue"> -->
+        <a href="/api/add" class="btn blue">Criar</a>
         Nome:<br>
         <input type="name" name="nome_pesquisa" ><br>
         Local:<br>
         <input type="name" name="local_pesquisa" ><br><br>
-        <input href="/api/user" type="button" value="Search" class="btn blue" onClick="search()">
+        <input href="/api/user" type="button" value="Procurar" class="btn blue" onClick="search()">
     </form>
 </div>
 </div>
@@ -292,6 +293,33 @@ td.text-right {
                 return false;
             }
         });
+    }
+
+    function saveUser(){
+
+       $.ajax({
+
+        url:"/api/user",
+        type:"post",
+        data:$("#the-form").serialize(),
+        success:function(res){
+
+            window.location.reload();
+            return false;
+        },
+        error:function(xhr, status, error){
+
+            console.log(xhr.responseText);
+            var err = '';
+            $.each(JSON.parse(xhr.responseText) , function(i, item) {
+
+                 err +='<li>'+item.msg+'</li>';
+            });
+            $(".err-area").html(err);
+            return false;
+        }
+
+       });
     }
 
     function deleteUser(id){
