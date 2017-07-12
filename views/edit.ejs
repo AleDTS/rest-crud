@@ -6,16 +6,240 @@
         <link rel="stylesheet" href="/../css/style.css">
     </head>
 <body>
+<style>
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
+
+body {
+  background-color: #3e94ec;
+  font-family: "Roboto", helvetica, arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+
+div.table-title {
+   display: block;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+}
+
+.table-title h3 {
+   color: #fafafa;
+   font-size: 30px;
+   font-weight: 400;
+   font-style:normal;
+   font-family: "Roboto", helvetica, arial, sans-serif;
+   text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+   text-transform:uppercase;
+}
+
+
+/*** Table Styles **/
+
+.table-fill {
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  height: 320px;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+}
+
+th {
+  color:#D5DDE5;;
+  background:#1b1e24;
+  border-bottom:4px solid #9ea7af;
+  border-right: 1px solid #343a45;
+  font-size:23px;
+  font-weight: 100;
+  padding:24px;
+  text-align:left;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  vertical-align:middle;
+}
+
+th:first-child {
+  border-top-left-radius:3px;
+}
+
+th:last-child {
+  border-top-right-radius:3px;
+  border-right:none;
+}
+
+tr {
+  border-top: 1px solid #C1C3D1;
+  border-bottom-: 1px solid #C1C3D1;
+  color:#666B85;
+  font-size:16px;
+  font-weight:normal;
+  text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+}
+
+tr:hover td {
+  background:#4E5066;
+  color:#FFFFFF;
+  border-top: 1px solid #22262e;
+  border-bottom: 1px solid #22262e;
+}
+
+tr:first-child {
+  border-top:none;
+}
+
+tr:last-child {
+  border-bottom:none;
+}
+
+tr:nth-child(odd) td {
+  background:#EBEBEB;
+}
+
+tr:nth-child(odd):hover td {
+  background:#4E5066;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius:3px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius:3px;
+}
+
+td {
+  background:#FFFFFF;
+  padding:20px;
+  text-align:left;
+  vertical-align:middle;
+  font-weight:300;
+  font-size:18px;
+  text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #C1C3D1;
+}
+
+td:last-child {
+  border-right: 0px;
+}
+
+th.text-left {
+  text-align: left;
+}
+
+th.text-center {
+  text-align: center;
+}
+
+th.text-right {
+  text-align: right;
+}
+
+td.text-left {
+  text-align: left;
+}
+
+td.text-center {
+  text-align: center;
+}
+
+td.text-right {
+  text-align: right;
+}
+#buttons {
+  padding-top: 50px;
+  text-align: center;
+}
+
+/* start da css for da buttons */
+.btn {
+  border-radius: 5px;
+  padding: 15px 25px;
+  font-size: 22px;
+  text-decoration: none;
+  margin: 20px;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+}
+
+.btn:active {
+  transform: translate(0px, 5px);
+  -webkit-transform: translate(0px, 5px);
+  box-shadow: 0px 1px 0px 0px;
+}
+
+.blue {
+  background-color: #55acee;
+  box-shadow: 0px 5px 0px 0px #3C93D5;
+}
+
+.blue:hover {
+  background-color: #6FC6FF;
+}
+
+.green {
+  background-color: #2ecc71;
+  box-shadow: 0px 5px 0px 0px #15B358;
+}
+
+.green:hover {
+  background-color: #48E68B;
+}
+
+.red {
+  background-color: #e74c3c;
+  box-shadow: 0px 5px 0px 0px #CE3323;
+}
+
+.red:hover {
+  background-color: #FF6656;
+}
+
+.purple {
+  background-color: #9b59b6;
+  box-shadow: 0px 5px 0px 0px #82409D;
+}
+
+.purple:hover {
+  background-color: #B573D0;
+}
+
+</style>
+
 <form method="post" action="" id="the-form">
     <table cellpadding="11">
     <tr>
-        <td class="label">Name</td><td>: <input type="text" name="name" value="<%=data[0].name%>"></td>
+        <td class="label">Nome</td><td>: <input type="text" name="nome" value="<%=data[0].nome%>"></td>
      </tr>
     <tr>
-        <td class="label">Email</td><td>: <input type="text" name="email" value="<%=data[0].email%>"></td>
+        <td class="label">Data</td><td>: <input type="date" name="data" value="<%=data[0].data%>"></td>
      </tr>
       <tr>
-        <td class="label">Password</td><td>: <input type="password" name="password" value="<%=data[0].password%>"></td>
+        <td class="label">Hora inicio</td><td>: <input type="time" name="hora_inicio" value="<%=data[0].hora_inicio%>"></td>
+     </tr>
+	<tr>
+        <td class="label">Link do Facebook</td><td>: <input type="text" name="link_facebook" value="<%=data[0].link_facebook%>"></td>
+     </tr>
+	<tr>
+        <td class="label">Reponsável</td><td>: <input type="text" name="responsavel" value="<%=data[0].responsavel%>"></td>
+     </tr>
+	<tr>
+        <td class="label">Organização Responsável</td><td>: <input type="text" name="org_responsavel" value="<%=data[0].org_responsavel%>"></td>
+     </tr>
+	<tr>
+        <td class="label">Categoria</td><td>: <input type="text" name="categoria" value="<%=data[0].categoria%>"></td>
+     </tr>
+	<tr>
+        <td class="label">Local do Evento</td><td>: <input type="text" name="local_evento" value="<%=data[0].local_evento%>"></td>
+     </tr>
+	<tr>
+        <td class="label">Descrição</td><td>: <input type="text" name="descricao" value="<%=data[0].descricao%>"></td>
      </tr>
      <tr>
         <td class="label"></td>
@@ -26,34 +250,34 @@
     </table>
 </form>
  <script>
-    
+
         function saveUser(){
-           
+
            $.ajax({
-            
-            url:"/api/user/"+<%=data[0].user_id%>,
+
+            url:"/api/user/"+<%=data[0].id%>,
             type:"put",
             data:$("#the-form").serialize(),
             success:function(res){
-                
+
                 window.location.href = '/api/user';
                 return false;
             },
             error:function(xhr, status, error){
-                
+
                 console.log(xhr.responseText);
                 var err = '';
                 $.each(JSON.parse(xhr.responseText) , function(i, item) {
-                   
+
                      err +='<li>'+item.msg+'</li>';
                 });
-                $(".err-area").html(err);    
+                $(".err-area").html(err);
                 return false;
             }
-            
+
            });
         }
-    
+
     </script>
 </body>
 </html>

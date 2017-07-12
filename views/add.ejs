@@ -211,77 +211,84 @@ td.text-right {
 }
 
 </style>
-<div class="data-table" >
-    <table border="1" cellpadding="7" cellspacing="7">
-        <tr>
-            <!-- <th width="50px">No</th> -->
-            <th>Data</th>
-            <th>Nome</th>
-            <th>Local do evento</th>
-			<th>Categoria</th>
-        </tr>
 
-        <% if(data.length){
+<form method="post" action="" id="the-form">
+    <table cellpadding="11">
+    <tr>
+        <td class="label">Nome</td><td>: <input type="text" name="nome" ></td>
+     </tr>
+    <tr>
+        <td class="label">Data</td><td>: <input type="date" name="data" ></td>
+     </tr>
+      <tr>
+        <td class="label">Hora inicio</td><td>: <input type="time" name="hora_inicio" ></td>
+     </tr>
+	<tr>
+        <td class="label">Link do Facebook</td><td>: <input type="text" name="link_facebook" ></td>
+     </tr>
+	<tr>
+        <td class="label">Reponsável</td><td>: <input type="text" name="responsavel" ></td>
+     </tr>
 
-         for(var i = 0;i < data.length;i++) { %>
+     <tr>
+         <td class="label">Organizacao responsavel</td>
+         <td>
+             <select>
+                 <% if(data.length){
+                     for(var i = 0;i < data.length;i++) { %>
+                  <option value="<%=data[i].nome%>"><%=data[i].nome%></option>
+                  <% }
+                  }else{ %>
+                      <option></option>
+                  <% } %>
+              </select>
+        </td>
+     </tr>
 
-        <tr>
-            <!-- <td><%=(i+1)%></td> -->
-            <td><%=data[i].data%></td>
-            <td>
-                <a href="/api/event">
-                    <%=data[i].nome%>
-                </a>
-            </td>
-			<td><%=data[i].local_evento%></td>
-            <td><%=data[i].categoria%></td>
-            <td>
-                <a class="a-inside edit" href="/api/user/<%=data[i].id%>">Edit</a>
 
-                <a class="a-inside delete" href="javascript:void(0)" onClick="deleteUser(<%=data[i].id%>)">Delete</a>
-
-            </td>
-        </tr>
-    <% }
-
-     }else{ %>
-         <tr>
-            <td colspan="5">No Data</td>
-         </tr>
-    <% } %>
-
+	<tr>
+        <td class="label">Categoria</td><td>: <input type="text" name="categoria" ></td>
+     </tr>
+     <tr>
+         <td class="label">Local do evento</td>
+         <td>
+             <select>
+                 <% if(data.length){
+                     for(var i = 0;i < data.length;i++) { %>
+                  <option value="<%=data[i].local_evento%>"><%=data[i].local_evento%></option>
+                  <% }
+                  }else{ %>
+                      <option></option>
+                  <% } %>
+              </select>
+        </td>
+     </tr>
+        <td class="label">Descrição</td><td>: <input type="text" name="descricao" ></td>
+     </tr>
+     <td class="label"></td>
+     <td>
+         &nbsp; <input class="btn blue" type="button" value="Save" onClick="saveUser()">
+     </td>
     </table>
-</div>
-<div class="page-data">
+</form>
+<tr>
+</tr>
+ <script>
 
-<div id="buttons" >
-  <a href="/api/add" class="btn blue">Criar</a>
-    <form method="post" action="" id="the-form">
-        Nome:<br>
-        <input type="name" name="nome_pesquisa" ><br>
-        Local:<br>
-        <input type="name" name="local_pesquisa" ><br><br>
-        <input href="/api/user" type="button" value="Search" class="btn blue" onClick="search()">
-    </form>
-</div>
-</div>
-<div class="page-data">
-     <ul class="err-area"></ul>
-</div>
+        function saveUser(){
 
-<script>
-
-    function search(){
-        $.ajax({
-            url:"/api/user",
+           $.ajax({
+           console.log(data);
+            url:"/api/add/",
             type:"post",
             data:$("#the-form").serialize(),
-            // console.log(data);
             success:function(res){
-                window.location.reload();
+
+                window.location.href = '/api/user';
                 return false;
             },
             error:function(xhr, status, error){
+
                 console.log(xhr.responseText);
                 var err = '';
                 $.each(JSON.parse(xhr.responseText) , function(i, item) {
@@ -291,28 +298,10 @@ td.text-right {
                 $(".err-area").html(err);
                 return false;
             }
-        });
-    }
 
-    function deleteUser(id){
+           });
+        }
 
-        $.ajax({
-            url:"/api/user/"+id,
-            type: 'DELETE',
-            success: function(res) {
-
-                window.location.reload();
-                return false;
-            },
-            error:function(xhr, status, error){
-
-                console.log(xhr.responseText);
-                alert("Error deleting");
-                return false;
-            }
-        });
-    }
-
-</script>
+    </script>
 </body>
 </html>

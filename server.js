@@ -23,9 +23,11 @@ app.use(
     connection(mysql,{
         host     : 'localhost',
         user     : 'root',
-        password : '',
-        database : 'test',
-        debug    : false //set true if you wanna see debug logger
+        password : 'root',
+        port     : 3306, //port mysql
+        // database :'test',
+        database :'unespin',
+        debug    : true //set true if you wanna see debug logger
     },'request')
 
 );
@@ -62,8 +64,7 @@ curut.get(function(req,res,next){
 
         if (err) return next("Cannot Connect");
 
-        var query = conn.query('SELECT * FROM t_user',function(err,rows){
-
+        var query = conn.query('SELECT data, nome, local_evento, categoria, id FROM Evento',function(err,rows){
             if(err){
                 console.log(err);
                 return next("Mysql error, check your query");
@@ -80,21 +81,23 @@ curut.get(function(req,res,next){
 curut.post(function(req,res,next){
 
     //validation
-    req.assert('name','Name is required').notEmpty();
-    req.assert('email','A valid email is required').isEmail();
-    req.assert('password','Enter a password 6 - 20').len(6,20);
-
-    var errors = req.validationErrors();
-    if(errors){
-        res.status(422).json(errors);
-        return;
-    }
+    // req.assert('nome','Nome é necessário').notEmpty();
+    // req.assert('data','Data não pode ser um campo vazio').notEmpty();
+    // req.assert('hora_inicio','horario de inicio nao pode ser vazio').notEmpty;
+	// req.assert('responsavel','responsavel é necessário').notEmpty();
+	// req.assert('org_responsavel','Organização responsável é necessário').notEmpty();
+	// req.assert('local_evento','Local é necessário').notEmpty();
+    //
+    // var errors = req.validationErrors();
+    // if(errors){
+    //     res.status(422).json(errors);
+    //     return;
+    // }
 
     //get data
     var data = {
-        name:req.body.name,
-        email:req.body.email,
-        password:req.body.password
+        nome:req.body.nome_pesquisa,
+        local_evento:req.body.local_pesquisa
      };
 
     //inserting into mysql
@@ -102,24 +105,62 @@ curut.post(function(req,res,next){
 
         if (err) return next("Cannot Connect");
 
-        var query = conn.query("INSERT INTO t_user set ? ",data, function(err, rows){
+        var query = conn.query(
+            "select data, nome, local_evento, categoria "+
+            "from Evento "+
+            "where nome like '%?%' or "+
+                        "local_evento like '%?%'"
+            ,[data.nome_pesquisa, data.local_pesquisa], function(err, rows){
 
            if(err){
                 console.log(err);
                 return next("Mysql error, check your query");
            }
-
-          res.sendStatus(200);
+           res.render('user',{title:"RESTful Crud Example",data:rows});
+        //   res.sendStatus(200);
 
         });
 
      });
 
+    //get data
+    // var data = {
+    //     nome:req.body.nome,
+    //     data:req.body.data,
+    //     hora_inicio:req.body.hora_inicio,
+	// 	link_facebook:req.body.link_facebook,
+	// 	responsavel:req.body.responsavel,
+	// 	org_responsavel:req.body.org_responsavel,
+	// 	categoria:req.body.categoria,
+	// 	local_evento:req.body.local_evento,
+	// 	descricao:req.body.descricao,
+    //  };
+    //
+    // //inserting into mysql
+    // req.getConnection(function (err, conn){
+    //
+    //     if (err) return next("Cannot Connect");
+    //
+    //     var query = conn.query("INSERT INTO Evento set ? ",data, function(err, rows){
+    //
+    //        if(err){
+    //             console.log(err);
+    //             return next("Mysql error, check your query");
+    //        }
+    //
+    //       res.sendStatus(200);
+    //
+    //     });
+    //
+    //  });
+
+
+
 });
 
 
 //now for Single route (GET,DELETE,PUT)
-var curut2 = router.route('/user/:user_id');
+var curut2 = router.route('/user/:id');
 
 /*------------------------------------------------------
 route.all is extremely useful. you can use it to do
@@ -137,13 +178,13 @@ curut2.all(function(req,res,next){
 //get data to update
 curut2.get(function(req,res,next){
 
-    var user_id = req.params.user_id;
+    var id = req.params.id;
 
     req.getConnection(function(err,conn){
 
         if (err) return next("Cannot Connect");
 
-        var query = conn.query("SELECT * FROM t_user WHERE user_id = ? ",[user_id],function(err,rows){
+        var query = conn.query("SELECT * FROM Evento WHERE id = ? ",[id],function(err,rows){
 
             if(err){
                 console.log(err);
@@ -163,12 +204,15 @@ curut2.get(function(req,res,next){
 
 //update data
 curut2.put(function(req,res,next){
-    var user_id = req.params.user_id;
+    var id = req.params.id;
 
     //validation
-    req.assert('name','Name is required').notEmpty();
-    req.assert('email','A valid email is required').isEmail();
-    req.assert('password','Enter a password 6 - 20').len(6,20);
+    req.assert('nome','Nome é necessário').notEmpty();
+    req.assert('data','Data não pode ser um campo vazio').notEmpty();
+    req.assert('hora_inicio','horario de inicio nao pode ser vazio').notEmpty;
+	req.assert('responsavel','responsavel é necessário').notEmpty();
+	req.assert('org_responsavel','Organização responsável é necessário').notEmpty();
+	req.assert('local_evento','Local é necessário').notEmpty();
 
     var errors = req.validationErrors();
     if(errors){
@@ -178,9 +222,15 @@ curut2.put(function(req,res,next){
 
     //get data
     var data = {
-        name:req.body.name,
-        email:req.body.email,
-        password:req.body.password
+        nome:req.body.nome,
+        data:req.body.data,
+        hora_inicio:req.body.hora_inicio,
+		link_facebook:req.body.link_facebook,
+		responsavel:req.body.responsavel,
+		org_responsavel:req.body.org_responsavel,
+		categoria:req.body.categoria,
+		local_evento:req.body.local_evento,
+		descricao:req.body.descricao,
      };
 
     //inserting into mysql
@@ -188,7 +238,7 @@ curut2.put(function(req,res,next){
 
         if (err) return next("Cannot Connect");
 
-        var query = conn.query("UPDATE t_user set ? WHERE user_id = ? ",[data,user_id], function(err, rows){
+        var query = conn.query("UPDATE Evento set ? WHERE id = ? ",[data,id], function(err, rows){
 
            if(err){
                 console.log(err);
@@ -206,13 +256,13 @@ curut2.put(function(req,res,next){
 //delete data
 curut2.delete(function(req,res,next){
 
-    var user_id = req.params.user_id;
+    var id = req.params.id;
 
      req.getConnection(function (err, conn) {
 
         if (err) return next("Cannot Connect");
 
-        var query = conn.query("DELETE FROM t_user  WHERE user_id = ? ",[user_id], function(err, rows){
+        var query = conn.query("DELETE FROM Evento  WHERE id = ? ",[id], function(err, rows){
 
              if(err){
                 console.log(err);
@@ -225,6 +275,113 @@ curut2.delete(function(req,res,next){
         //console.log(query.sql);
 
      });
+});
+
+var curut3 = router.route('/add');
+
+curut3.get(function(req,res,next){
+
+	var id = req.params.id;
+    req.getConnection(function(err,conn){
+        if (err) return next("Cannot Connect");
+
+        var query = conn.query('SELECT O.nome, E.local_evento FROM Evento as E, Organizacao as O where E.org_responsavel = O.id',function(err,rows){
+
+
+            if(err){
+                console.log(err);
+                return next("Mysql error, check your query");
+            }
+
+            res.render('add',{title:"RESTful Crud Example",data:rows});
+
+         });
+
+        var query = conn.query('SELECT * FROM Evento',function(err,rows){
+
+            if(err){
+                console.log(err);
+                return next("Mysql error, check your query");
+            }
+
+            res.render('add',{title:"RESTful Crud Example",data:rows});
+
+         });
+
+    });
+});
+
+curut3.post(function(req,res,next){
+
+    //validation
+    req.assert('nome','Nome é necessário').notEmpty();
+    req.assert('data','Data não pode ser um campo vazio').notEmpty();
+    req.assert('hora_inicio','horario de inicio nao pode ser vazio').notEmpty();
+	req.assert('responsavel','responsavel é necessário').notEmpty();
+	req.assert('org_responsavel','Organização responsável é necessário').notEmpty();
+	req.assert('local_evento','Local é necessário').notEmpty();
+
+    var errors = req.validationErrors();
+    if(errors){
+        res.status(422).json(errors);
+        return;
+    }
+
+    //get data
+    var data = {
+        nome:req.body.nome,
+        data:req.body.data,
+        hora_inicio:req.body.hora_inicio,
+		link_facebook:req.body.link_facebook,
+		responsavel:req.body.responsavel,
+		org_responsavel:req.body.org_responsavel,
+		categoria:req.body.categoria,
+		local_evento:req.body.local_evento,
+		descricao:req.body.descricao,
+     };
+
+    //inserting into mysql
+    req.getConnection(function (err, conn){
+
+        if (err) return next("Cannot Connect");
+
+        var query = conn.query("INSERT INTO Evento set ? ",data, function(err, rows){
+
+           if(err){
+                console.log(err);
+                return next("Mysql error, check your query");
+           }
+
+          res.sendStatus(200);
+
+        });
+
+     });
+
+});
+
+
+var curut4 = router.route('/event');
+
+curut4.get(function(req,res,next){
+
+	var id = req.params.id;
+    req.getConnection(function(err,conn){
+
+        if (err) return next("Cannot Connect");
+
+        var query = conn.query('SELECT * FROM Evento',function(err,rows){
+
+            if(err){
+                console.log(err);
+                return next("Mysql error, check your query");
+            }
+
+            res.render('event',{title:"RESTful Crud Example",data:rows});
+
+         });
+
+    });
 });
 
 //now we need to apply our router here

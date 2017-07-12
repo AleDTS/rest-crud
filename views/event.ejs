@@ -211,108 +211,57 @@ td.text-right {
 }
 
 </style>
-<div class="data-table" >
+
+<div class="data-table">
     <table border="1" cellpadding="7" cellspacing="7">
         <tr>
-            <!-- <th width="50px">No</th> -->
-            <th>Data</th>
-            <th>Nome</th>
-            <th>Local do evento</th>
-			<th>Categoria</th>
+            <td>Nome</td>
+            <td><%=data[0].nome%></td>
         </tr>
-
-        <% if(data.length){
-
-         for(var i = 0;i < data.length;i++) { %>
-
         <tr>
-            <!-- <td><%=(i+1)%></td> -->
-            <td><%=data[i].data%></td>
-            <td>
-                <a href="/api/event">
-                    <%=data[i].nome%>
-                </a>
-            </td>
-			<td><%=data[i].local_evento%></td>
-            <td><%=data[i].categoria%></td>
-            <td>
-                <a class="a-inside edit" href="/api/user/<%=data[i].id%>">Edit</a>
-
-                <a class="a-inside delete" href="javascript:void(0)" onClick="deleteUser(<%=data[i].id%>)">Delete</a>
-
-            </td>
+            <td>Data</td>
+            <td><%=data[0].data%></td>
         </tr>
-    <% }
-
-     }else{ %>
-         <tr>
-            <td colspan="5">No Data</td>
-         </tr>
-    <% } %>
-
+        <tr>
+            <td>Hora/td>
+            <td><%=data[0].hora_inicio%></td>
+        </tr>
+        <tr>
+            <td>Link do facebook</td>
+            <td><%=data[0].link_facebook%></td>
+        </tr>
+        <tr>
+            <td>Responsável]</td>
+            <td><%=data[0].responsavel%></td>
+        </tr>
+        <tr>
+            <td>Organização responsável</td>
+            <td><%=data[0].org_responsavel%></td>
+        </tr>
+        <tr>
+            <td>Categoria</td>
+            <td><%=data[0].categoria%></td>
+        </tr>
+        <tr>
+            <td>Local</td>
+            <td><%=data[0].local_evento%></td>
+        </tr>
+        <tr>
+            <td>Descrição</td>
+            <td><%=data[0].descricao%></td>
+        </tr>
     </table>
 </div>
+
 <div class="page-data">
 
-<div id="buttons" >
-  <a href="/api/add" class="btn blue">Criar</a>
-    <form method="post" action="" id="the-form">
-        Nome:<br>
-        <input type="name" name="nome_pesquisa" ><br>
-        Local:<br>
-        <input type="name" name="local_pesquisa" ><br><br>
-        <input href="/api/user" type="button" value="Search" class="btn blue" onClick="search()">
-    </form>
+<div id="buttons">
+  <a href="/api/user" class="btn blue">Voltar</a>
 </div>
 </div>
 <div class="page-data">
      <ul class="err-area"></ul>
 </div>
 
-<script>
-
-    function search(){
-        $.ajax({
-            url:"/api/user",
-            type:"post",
-            data:$("#the-form").serialize(),
-            // console.log(data);
-            success:function(res){
-                window.location.reload();
-                return false;
-            },
-            error:function(xhr, status, error){
-                console.log(xhr.responseText);
-                var err = '';
-                $.each(JSON.parse(xhr.responseText) , function(i, item) {
-
-                     err +='<li>'+item.msg+'</li>';
-                });
-                $(".err-area").html(err);
-                return false;
-            }
-        });
-    }
-
-    function deleteUser(id){
-
-        $.ajax({
-            url:"/api/user/"+id,
-            type: 'DELETE',
-            success: function(res) {
-
-                window.location.reload();
-                return false;
-            },
-            error:function(xhr, status, error){
-
-                console.log(xhr.responseText);
-                alert("Error deleting");
-                return false;
-            }
-        });
-    }
-
-</script>
 </body>
 </html>
